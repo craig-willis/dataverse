@@ -374,6 +374,13 @@
                     </ui:fragment>
                 </div>
 
+                <!-- NDSToolManager button -->
+                <p:commandLink rendered="#{ DatasetPage.canSeeNDSToolManagerButton(fileMetadata) and DatasetPage.canDownloadFile(fileMetadata)}" 
+                               type="button" styleClass="btn btn-default"
+                               actionListener="#{DatasetPage.ndsToolManagerLink(fileMetadata, '')}" target="_blank">
+                    <span class="glyphicon glyphicon-equalizer"/> #{bundle.explore}
+                </p:commandLink>
+
                 <!-- non-tabular data file: -->
                 <!-- no guest book/terms of use/etc. - straight to the download API url: -->
                 <p:commandLink rendered="#{ DatasetPage.canDownloadFile(fileMetadata) and !(fileMetadata.dataFile.tabularData) and !(DatasetPage.downloadPopupRequired) }"
@@ -381,6 +388,7 @@
                                actionListener="#{DatasetPage.startFileDownload(fileMetadata, '')}">
                     <span class="glyphicon glyphicon-download-alt"/> #{bundle.download}
                 </p:commandLink>
+
                 <!-- guest book or terms of use, etc. enabled - open "download popup" first: -->
                 <p:commandLink rendered="#{ DatasetPage.canDownloadFile(fileMetadata) and !(fileMetadata.dataFile.tabularData) and DatasetPage.downloadPopupRequired }"
                                type="button" styleClass="btn btn-default"

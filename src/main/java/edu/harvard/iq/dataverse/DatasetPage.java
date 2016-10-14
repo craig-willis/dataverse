@@ -3370,6 +3370,51 @@ public class DatasetPage implements java.io.Serializable {
         return "";
     }
 
+    public String ndsToolManagerLink(FileMetadata fm, String type){
+        String retVal = getNDSToolManagerURLComplete(fm.getDataFile().getId());
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(retVal);
+        } catch (IOException ex) {
+            logger.info("Failed to issue a redirect to NDS Tool Manager url.");
+        }
+        return "";
+    }
+
+    public boolean canSeeNDSToolManagerButton(FileMetadata fm){
+        String NDSToolManagerUrl = settingsService.getValueForKey(SettingsServiceBean.Key.NDSToolManagerUrl);
+
+        if (NDSToolManagerUrl != null && !NDSToolManagerUrl.equals("")) {
+            return true;
+        }
+	return false;
+    }
+   
+    public String getNDSToolManagerURL() {   
+        String NDSToolManagerUrl = settingsService.getValueForKey(SettingsServiceBean.Key.NDSToolManagerUrl);
+
+        if (NDSToolManagerUrl != null && !NDSToolManagerUrl.equals("")) {
+            return NDSToolManagerUrl;
+        }
+
+        return "";
+    }
+
+    public String getNDSToolManagerURLComplete(Long fileid) {
+        String dataverseHostname = settingsService.getValueForKey(SettingsServiceBean.Key.DataverseHostname);
+        String toolManagerUrl = settingsService.getValueForKey(SettingsServiceBean.Key.NDSToolManagerUrl);
+        String dataUrl = dataverseHostname + "/api/access/datafile/" + fileid;
+	String userId = ((AuthenticatedUser) session.getUser()).getUserIdentifier();
+	String userName = ((AuthenticatedUser) session.getUser()).getName();
+	String instanceName = userName + "'s Instance";
+        // toolserver?ownerId=&dataset=&datasetId=&key=
+        if (toolManagerUrl != null && !toolManagerUrl.equals("")) {
+            return toolManagerUrl + "?ownerId=" + userId + "&name=" + instanceName +
+                    "&dataset=" + dataUrl + "&source=dataverse&datasetId=" + fileid + "&" + getApiTokenKey();
+        }
+
+        return "";
+    }
+
     public String getDataExploreURLComplete(Long fileid) {
         String TwoRavensUrl = settingsService.getValueForKey(SettingsServiceBean.Key.TwoRavensUrl);
         String TwoRavensDefaultLocal = "/dataexplore/gui.html?dfId=";

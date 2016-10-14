@@ -147,6 +147,9 @@ public class SettingsServiceBean {
         */
         /* TwoRavens location */
         TwoRavensUrl,
+	/* NDS Tool Manager API location */
+        NDSToolManagerUrl,
+        DataverseHostname,
         /** Optionally override http://guides.dataverse.org . */
         GuidesBaseUrl,
         /* zip download size limit */
